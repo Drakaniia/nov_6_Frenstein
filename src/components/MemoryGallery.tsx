@@ -1,94 +1,81 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Card } from '@/components/ui/card';
+
 import memory1 from '@/assets/memory1.jpg';
 import memory2 from '@/assets/memory2.jpg';
 import memory3 from '@/assets/memory3.jpg';
 import memory4 from '@/assets/memory4.jpg';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const memories = [
   { id: 1, label: 'Beautiful Smile', image: memory1 },
   { id: 2, label: 'Park Adventures', image: memory2 },
   { id: 3, label: 'Sweet Moments', image: memory3 },
   { id: 4, label: 'Fun Times', image: memory4 },
-  { id: 5, label: 'Precious Memories', image: memory1 },
-  { id: 6, label: 'Happy Days', image: memory2 },
-  { id: 7, label: 'Together Forever', image: memory3 },
-  { id: 8, label: 'Special Moments', image: memory4 },
 ];
 
 export const MemoryGallery = () => {
-  const galleryRef = useRef<HTMLDivElement>(null);
-  const row1Ref = useRef<HTMLDivElement>(null);
-  const row2Ref = useRef<HTMLDivElement>(null);
+  const rowRefs = useRef<HTMLDivElement[]>([]);
+  const animationsRef = useRef<gsap.core.Tween[]>([]);
 
   useEffect(() => {
-    const cards = galleryRef.current?.querySelectorAll('.memory-card');
-    if (!cards) return;
+    const rows = rowRefs.current;
+    animationsRef.current.forEach(a => a.kill());
+    animationsRef.current = [];
 
-    // Stagger fade-in animation on scroll
-    gsap.from(cards, {
-      opacity: 0,
-      y: 100,
-      stagger: 0.15,
-      duration: 0.8,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: galleryRef.current,
-        start: 'top 80%',
-        end: 'top 20%',
-        toggleActions: 'play none none reverse',
-      },
+    rows.forEach((row, i) => {
+      if (!row) return;
+
+      const cards = Array.from(row.querySelectorAll('.memory-card'));
+      const cardWidth = (cards[0] as HTMLElement)?.offsetWidth + 24;
+      const totalCards = cards.length;
+      const totalWidth = totalCards * cardWidth;
+      const screenWidth = window.innerWidth;
+
+      // Clone enough cards to ensure a smooth loop
+      const clonesNeeded = Math.ceil((screenWidth * 2) / totalWidth) + 1;
+      for (let j = 0; j < clonesNeeded; j++) {
+        cards.forEach(card => {
+          const clone = card.cloneNode(true);
+          row.appendChild(clone);
+        });
+      }
+
+      const fullWidth = row.scrollWidth;
+      const direction = i % 2 === 0 ? 1 : -1;
+
+      // Start positions
+      gsap.set(row, { x: direction === 1 ? 0 : -totalWidth });
+
+      // Smooth infinite loop
+      const anim = gsap.to(row, {
+        x: direction === 1 ? -totalWidth : 0,
+        duration: 90,
+        ease: 'none',
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize(x => {
+            const mod = parseFloat(x) % totalWidth;
+            return `${mod}`;
+          }),
+        },
+      });
+
+      animationsRef.current.push(anim);
     });
 
-    // After initial animation, create continuous scrolling effect
-    const setupContinuousScroll = () => {
-      // Row 1: Left to Right
-      gsap.to(row1Ref.current, {
-        x: '-20%',
-        duration: 20,
-        ease: 'none',
-        repeat: -1,
-        yoyo: true,
-        scrollTrigger: {
-          trigger: galleryRef.current,
-          start: 'bottom bottom',
-        },
-      });
-
-      // Row 2: Right to Left
-      gsap.to(row2Ref.current, {
-        x: '20%',
-        duration: 20,
-        ease: 'none',
-        repeat: -1,
-        yoyo: true,
-        scrollTrigger: {
-          trigger: galleryRef.current,
-          start: 'bottom bottom',
-        },
-      });
-    };
-
-    // Delay continuous scroll until after initial animation
-    setTimeout(setupContinuousScroll, 2000);
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
+    return () => animationsRef.current.forEach(a => a.kill());
   }, []);
 
-  const halfLength = Math.ceil(memories.length / 2);
-  const row1 = memories.slice(0, halfLength);
-  const row2 = memories.slice(halfLength);
+  const handleRowEnter = (index: number) =>
+    animationsRef.current[index]?.pause();
+  const handleRowLeave = (index: number) =>
+    animationsRef.current[index]?.play();
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-gradient-to-b from-background to-muted/30">
       <div className="text-center mb-12 px-4">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-celebration bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
           Memories Together 📸
         </h2>
         <p className="text-lg text-muted-foreground">
@@ -96,44 +83,35 @@ export const MemoryGallery = () => {
         </p>
       </div>
 
-      <div ref={galleryRef} className="space-y-8 overflow-hidden">
-        {/* Row 1 - Scrolls Left to Right */}
-        <div ref={row1Ref} className="flex gap-6 px-6">
-          {row1.map((memory) => (
-            <Card
-              key={memory.id}
-              className="memory-card flex-shrink-0 w-80 h-96 overflow-hidden hover:scale-105 transition-transform shadow-float"
-            >
-              <img 
-                src={memory.image} 
-                alt={memory.label}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <p className="text-xl font-semibold text-white">{memory.label}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
-
-        {/* Row 2 - Scrolls Right to Left */}
-        <div ref={row2Ref} className="flex gap-6 px-6">
-          {row2.map((memory) => (
-            <Card
-              key={memory.id}
-              className="memory-card flex-shrink-0 w-80 h-96 overflow-hidden hover:scale-105 transition-transform shadow-float relative"
-            >
-              <img 
-                src={memory.image} 
-                alt={memory.label}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <p className="text-xl font-semibold text-white">{memory.label}</p>
-              </div>
-            </Card>
-          ))}
-        </div>
+      <div className="space-y-10 overflow-hidden">
+        {[0, 1].map(rowIndex => (
+          <div
+            key={rowIndex}
+            ref={el => (rowRefs.current[rowIndex] = el!)}
+            className="flex gap-6 px-6 cursor-grab active:cursor-grabbing"
+            onMouseEnter={() => handleRowEnter(rowIndex)}
+            onMouseLeave={() => handleRowLeave(rowIndex)}
+          >
+            {memories.map((memory, index) => (
+              <Card
+                key={`${memory.id}-${rowIndex}-${index}`}
+                className="memory-card flex-shrink-0 basis-[80%] sm:basis-1/2 md:basis-1/3 xl:basis-1/5 h-96 overflow-hidden hover:scale-105 transition-transform shadow-lg relative"
+              >
+                <img
+                  src={memory.image}
+                  alt={memory.label}
+                  className="w-full h-full object-cover pointer-events-none"
+                  draggable="false"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                  <p className="text-xl font-semibold text-white">
+                    {memory.label}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ))}
       </div>
 
       <div className="text-center mt-16 px-4">
