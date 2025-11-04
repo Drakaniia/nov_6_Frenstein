@@ -5,19 +5,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const messages = [
-  "Life is not worthwhile.",
-  "I don't believe that,",
-  "I'll succeed my goals",
-  "Overthinking much—yet,",
-  "Spending my time in studying and",
-  "Achieving dreams,",
-  "It's notorious!",
-  "Stop telling me,",
-  "I will have a better future.",
-  "In my perspective,",
-  "A degree is just a paper.",
+  "Life will be better with education.",
   "I just don't think that,",
-  "Life will be better with education."
+  "A degree is just a paper.",
+  "In my perspective,",
+  "I will have a better future.",
+  "Stop telling me,",
+  "It's notorious!",
+  "Achieving dreams,",
+  "Spending my time in studying and",
+  "Overthinking much—yet,",
+  "I'll succeed my goals",
+  "I don't believe that,",
+  "Life is not worthwhile."
 ];
 
 export const ScrollMessage = () => {
