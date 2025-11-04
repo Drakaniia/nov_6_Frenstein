@@ -11,7 +11,7 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [pin, setPin] = useState(['', '', '', '']);
   const [shake, setShake] = useState(false);
-  const correctPin = '1234'; // You can change this to any 4-digit code
+  const correctPin = '2306'; // You can change this to any 4-digit code
 
   useEffect(() => {
     // Floating animation

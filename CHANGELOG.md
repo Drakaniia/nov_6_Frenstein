@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+### 2025-11-05
+
+#### 🔧 Maintenance
+
+- **update landing card into a vault** (`6f50e13`) - *Qwenzy*
+  - 📁 1 doc file, 1 config file, 3 frontend files, 1 backend file
+
+**Total**: 1 commit(s)
+
+---
+
+
 ### 2025-10-31
 
 #### ♻️ Code Refactoring
