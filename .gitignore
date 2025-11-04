@@ -26,3 +26,8 @@ dist-ssr
 # dependencies
 node_modules/
 package-lock.json
+
+# Images
+*.jpg
+*.png
+*.gif
