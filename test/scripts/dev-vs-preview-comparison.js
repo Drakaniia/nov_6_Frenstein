@@ -133,36 +133,48 @@ function waitForServer(port, maxAttempts = 30) {
 
 async function startDevServer() {
   return new Promise((resolve, reject) => {
-    // Use cross-platform approach
+    const rootDir = path.join(__dirname, '../..');
     const isWindows = process.platform === 'win32';
-    const npmCmd = isWindows ? 'npm.cmd' : 'npm';
     
-    const devServer = spawn(npmCmd, ['run', 'dev'], { 
-      cwd: path.join(__dirname, '../..'),
+    // Use direct command with shell for better Windows compatibility
+    const command = isWindows ? 'npm.cmd run dev' : 'npm run dev';
+    
+    const devServer = spawn(command, [], { 
+      cwd: rootDir,
       shell: true,
-      stdio: 'pipe'
+      stdio: 'pipe',
+      env: { ...process.env }
     });
     
     let output = '';
+    let hasResolved = false;
     
     devServer.stdout.on('data', (data) => {
-      output += data.toString();
-      if (output.includes('Local:')) {
-        setTimeout(() => resolve(devServer), 2000);
+      const text = data.toString();
+      output += text;
+      console.log('Dev server:', text.trim());
+      
+      if ((output.includes('Local:') || output.includes('localhost:8080')) && !hasResolved) {
+        hasResolved = true;
+        setTimeout(() => resolve(devServer), 3000);
       }
     });
     
     devServer.stderr.on('data', (data) => {
-      console.error('Dev server error:', data.toString());
+      const text = data.toString();
+      console.log('Dev server output:', text.trim());
+      output += text;
     });
     
     devServer.on('error', (error) => {
-      reject(new Error(`Failed to start dev server: ${error.message}`));
+      if (!hasResolved) {
+        reject(new Error(`Failed to start dev server: ${error.message}`));
+      }
     });
     
     setTimeout(() => {
-      if (!output.includes('Local:')) {
-        reject(new Error('Dev server failed to start within timeout'));
+      if (!hasResolved) {
+        reject(new Error('Dev server failed to start within 30 seconds'));
       }
     }, 30000);
   });

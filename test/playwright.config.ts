@@ -7,7 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [
-    ['html', { outputFolder: './playwright-report' }],  // Changed: moved outside test-results
+    ['html', { outputFolder: './playwright-report' }],
     ['json', { outputFile: './test-results/playwright-results.json' }],
     ['list']
   ],
