@@ -63,7 +63,7 @@ export const HeroSection = () => {
       start: "top top",                                                                        
       end: "+=20%",                                      
       scrub: 1,
-      pin: true,
+      pin: true, // Pin the section during scroll
       anticipatePin: 1,                                                                                
       onUpdate: (self) => {                                                                    
         const progress = self.progress;                                                        
