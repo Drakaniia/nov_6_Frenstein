@@ -165,7 +165,7 @@ export const HoverMouse = () => {
 
       <div className="flex h-screen">
         {/* Left Side - Music Player and Message */}
-        <div className="w-80 p-6 bg-white/80 backdrop-blur-sm shadow-xl">
+        <div className="w-96 p-6 bg-white/80 backdrop-blur-sm shadow-xl">
           {/* Music Player */}
           <Card className="p-4 mb-6">
             <div className="text-center mb-4">
@@ -227,7 +227,7 @@ export const HoverMouse = () => {
           <Card className="p-6">
             <h2 className="text-3xl font-bold mb-4 text-center bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent" 
                 style={{ fontFamily: 'Dancing Script, cursive' }}>
-              Happy 21st Birthday, My Dear One
+              Happy 21st Birthday, My Love!
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
@@ -252,11 +252,11 @@ export const HoverMouse = () => {
           className="flex-1 flex items-center justify-center cursor-none"
         >
           <div className="text-center">
-            <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 animate-pulse">
-              Hover Your Mouse
+            <h1 className="text-1xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 animate-pulse">
+              HOVER YOUR MOUSE
             </h1>
-            <p className="text-xl text-gray-600 mt-4">
-              Move your cursor around to create magical effects!
+            <p className="text-x-01 text-gray-600 mt-2">
+              USE LAPTOP OR DESKROP FOR BETTER EXPERIENCE 
             </p>
           </div>
         </div>
