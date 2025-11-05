@@ -47,37 +47,41 @@ export const HeroSection = () => {
       repeat: -1,                                                                              
     });                                                                                        
 
-    // Set initial positions
-    gsap.set(introRef.current, { x: 0 }); // Start centered
+    // Set initial positions - intro content centered, image hidden on right
+    gsap.set(introRef.current, { 
+      xPercent: 0, // Start at center
+      x: 0 
+    });
     gsap.set(imageContainerRef.current, { 
       x: "100%", // Start completely hidden on the right
       opacity: 0 
     });
 
-    // Scroll-triggered animations with different timings
+    // Scroll-triggered animations with pinning
     ScrollTrigger.create({                                                                     
       trigger: containerRef.current,                                                           
-      start: "top center",                                                                        
-      end: "bottom center",                                         
-      scrub: 1,                                                                                
+      start: "top top",                                                                        
+      end: "+=20%",                                      
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,                                                                                
       onUpdate: (self) => {                                                                    
         const progress = self.progress;                                                        
 
         // Move intro content to the left gradually (starts moving right away)
         gsap.to(introRef.current, {                                                            
-          x: -progress * 40 + "%", // Move left by up to 40% of container width                     
-          duration: 0.6,                                                                       
+          x: -progress * 300,               
+          duration: 0.4,                                                                       
           ease: "power2.out"                                                                         
         });                                                                                    
 
-        // Image reveals sooner and moves faster from right to left
-        // Start revealing at 20% scroll progress instead of 0%
-        const imageProgress = Math.max(0, (progress - 0.2) / 0.8); // Starts at 20% scroll, reaches full at 100%
+        // Image reveals earlier - starts at 30% scroll progress
+        const imageProgress = Math.max(0, (progress - 0.3) / 0.7); // Starts at 30%, full at 100%
         
         gsap.to(imageContainerRef.current, {                                                   
-          x: (1 - imageProgress) * 80 + "%", // Start from 60% right and move to 0%             
+          x: (1 - imageProgress) * 50 + "%", // Move from 100% to 0%             
           opacity: imageProgress,                                                                   
-          duration: 0.6,                                                                       
+          duration: 0.4,                                                                       
           ease: "power2.out"                                                                         
         });                                                                                    
       }                                                                                        
@@ -94,7 +98,7 @@ export const HeroSection = () => {
   }, []);                                                                                      
                                                                                                
   return (                                                                                     
-    <section ref={containerRef} className="h-screen relative overflow-hidden bg-transparent z-10">                 
+    <section ref={containerRef} className="min-h-screen relative overflow-hidden bg-transparent z-10">                 
       {/* Hero intro content - starts centered */}                                                               
       <div                                                                                     
         ref={heroRef}                                                                          
