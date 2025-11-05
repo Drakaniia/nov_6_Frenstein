@@ -21,7 +21,18 @@ beforeAll(() => {
       to: vi.fn(),
       set: vi.fn(),
       from: vi.fn(),
+      utils: {
+        unitize: vi.fn((fn) => fn)
+      }
     },
+    ScrollTrigger: {
+      create: vi.fn(),
+      getAll: vi.fn(() => []),
+    }
+  }))
+
+  // Mock GSAP modules
+  vi.mock('gsap/ScrollTrigger', () => ({
     ScrollTrigger: {
       create: vi.fn(),
       getAll: vi.fn(() => []),
@@ -33,13 +44,17 @@ beforeAll(() => {
     default: vi.fn(),
   }))
 
-  // Mock asset imports
+  // Mock asset imports - Fixed: removed the commented line that caused the error
   vi.mock('@/assets/Hero Image.png', () => ({
     default: '/mock-hero-image.png'
   }))
   
   vi.mock('@/assets/giig.gif', () => ({
     default: '/mock-gif.gif'
+  }))
+
+  vi.mock('@/assets/Cover of seven by Taylor Swift.jpg', () => ({
+    default: '/mock-cover.jpg'
   }))
 
   // Mock audio files
@@ -66,8 +81,8 @@ beforeAll(() => {
       matches: false,
       media: query,
       onchange: null,
-      addListener: vi.fn(), // deprecated
-      removeListener: vi.fn(), // deprecated
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
@@ -79,12 +94,17 @@ beforeAll(() => {
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
-  }))
+  })) as any
 
   // Mock ResizeObserver
   global.ResizeObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
-  }))
+  })) as any
+
+  // Mock HTMLMediaElement
+  window.HTMLMediaElement.prototype.load = vi.fn()
+  window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined)
+  window.HTMLMediaElement.prototype.pause = vi.fn()
 })

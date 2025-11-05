@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-11-05T16:00:26.819Z",
+  "dev": {
+    "accessible": false,
+    "rendered": false,
+    "errors": [],
+    "screenshot": null
+  },
+  "preview": {
+    "accessible": false,
+    "rendered": false,
+    "errors": [],
+    "screenshot": null
+  },
+  "comparison": {
+    "consistent": false,
+    "issues": [
+      "Comparison failed: Dev server failed to start within timeout"
+    ]
+  }
+}

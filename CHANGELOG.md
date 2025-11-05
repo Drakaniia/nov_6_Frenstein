@@ -8,6 +8,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 2025-11-05
 
+#### ✨ New Features
+
+- **add comprehensive testing** (`fab8f6c`) - *Qwenzy*
+  - 📁 12 test files, 4 doc files, 10 config files, 26 frontend files, 3 backend files
+  - 📊 *Large change (39 files), Config changes, API changes*
+
+**Total**: 1 commit(s)
+
+---
+
+
+### 2025-11-05
+
 #### 🔧 Maintenance
 
 - **last** (`47cbe9d`) - *Qwenzy*

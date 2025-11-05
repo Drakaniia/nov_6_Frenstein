@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
@@ -52,8 +52,11 @@ async function testServer(url, label, resultKey) {
     }
     
     // Check for specific components
-    const landingCardExists = await page.$('text=Enter PIN to Unlock') !== null;
-    if (!landingCardExists) {
+    const landingCardText = await page.evaluate(() => {
+      return document.body.innerText.includes('Enter PIN to Unlock');
+    });
+    
+    if (!landingCardText) {
       results.comparison.issues.push(`${label} missing LandingCard component`);
     }
     
@@ -73,7 +76,10 @@ async function testServer(url, label, resultKey) {
         await pinInputs[3].type('6');
         
         // Wait for transition
-        await page.waitForSelector('text=Happy Birthday My Baby!', { timeout: 5000 });
+        await page.waitForFunction(
+          () => document.body.innerText.includes('Happy Birthday My Baby!'),
+          { timeout: 5000 }
+        );
         
         // Take screenshot of main app
         const mainAppScreenshot = path.join(testResultsDir, `${resultKey}-main-app.png`);
@@ -94,26 +100,55 @@ async function testServer(url, label, resultKey) {
   
   results[resultKey].errors = errors;
   if (errors.length > 0) {
-    console.log(`⚠️ ${label} console errors:`, errors);
+    console.log(`⚠️ ${label} console errors:`, errors.slice(0, 5)); // Show first 5 errors
   }
   
   await browser.close();
 }
 
+function waitForServer(port, maxAttempts = 30) {
+  return new Promise((resolve, reject) => {
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      try {
+        // Use a simpler command that works cross-platform
+        const isWindows = process.platform === 'win32';
+        const cmd = isWindows 
+          ? `netstat -ano | findstr :${port}`
+          : `lsof -i :${port}`;
+        
+        execSync(cmd, { stdio: 'ignore' });
+        clearInterval(interval);
+        resolve(true);
+      } catch (error) {
+        if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          reject(new Error(`Server on port ${port} did not start within ${maxAttempts} attempts`));
+        }
+      }
+    }, 1000);
+  });
+}
+
 async function startDevServer() {
   return new Promise((resolve, reject) => {
-    const devServer = spawn('npm', ['run', 'dev'], { 
+    // Use cross-platform approach
+    const isWindows = process.platform === 'win32';
+    const npmCmd = isWindows ? 'npm.cmd' : 'npm';
+    
+    const devServer = spawn(npmCmd, ['run', 'dev'], { 
       cwd: path.join(__dirname, '../..'),
+      shell: true,
       stdio: 'pipe'
     });
     
-    let serverReady = false;
+    let output = '';
     
     devServer.stdout.on('data', (data) => {
-      const output = data.toString();
-      if (output.includes('Local:') && !serverReady) {
-        serverReady = true;
-        setTimeout(() => resolve(devServer), 2000); // Give it time to fully start
+      output += data.toString();
+      if (output.includes('Local:')) {
+        setTimeout(() => resolve(devServer), 2000);
       }
     });
     
@@ -121,8 +156,12 @@ async function startDevServer() {
       console.error('Dev server error:', data.toString());
     });
     
+    devServer.on('error', (error) => {
+      reject(new Error(`Failed to start dev server: ${error.message}`));
+    });
+    
     setTimeout(() => {
-      if (!serverReady) {
+      if (!output.includes('Local:')) {
         reject(new Error('Dev server failed to start within timeout'));
       }
     }, 30000);
@@ -131,17 +170,20 @@ async function startDevServer() {
 
 async function startPreviewServer() {
   return new Promise((resolve, reject) => {
-    const previewServer = spawn('npm', ['run', 'preview'], { 
+    const isWindows = process.platform === 'win32';
+    const npmCmd = isWindows ? 'npm.cmd' : 'npm';
+    
+    const previewServer = spawn(npmCmd, ['run', 'preview'], { 
       cwd: path.join(__dirname, '../..'),
+      shell: true,
       stdio: 'pipe'
     });
     
-    let serverReady = false;
+    let output = '';
     
     previewServer.stdout.on('data', (data) => {
-      const output = data.toString();
-      if (output.includes('Local:') && !serverReady) {
-        serverReady = true;
+      output += data.toString();
+      if (output.includes('Local:')) {
         setTimeout(() => resolve(previewServer), 2000);
       }
     });
@@ -150,8 +192,12 @@ async function startPreviewServer() {
       console.error('Preview server error:', data.toString());
     });
     
+    previewServer.on('error', (error) => {
+      reject(new Error(`Failed to start preview server: ${error.message}`));
+    });
+    
     setTimeout(() => {
-      if (!serverReady) {
+      if (!output.includes('Local:')) {
         reject(new Error('Preview server failed to start within timeout'));
       }
     }, 30000);
@@ -166,25 +212,30 @@ async function main() {
   try {
     // Build first
     console.log('📦 Building project...');
-    const { execSync } = require('child_process');
     execSync('npm run build', { 
       cwd: path.join(__dirname, '../..'), 
-      stdio: 'inherit' 
+      stdio: 'inherit',
+      shell: true
     });
     
     // Start dev server
     console.log('🔧 Starting dev server...');
     devServer = await startDevServer();
+    await waitForServer(8080);
     
     // Test dev server
     await testServer('http://localhost:8080', 'Dev Server', 'dev');
     
     // Stop dev server
-    devServer.kill();
+    if (devServer) {
+      devServer.kill('SIGTERM');
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
     
     // Start preview server
     console.log('🔧 Starting preview server...');
     previewServer = await startPreviewServer();
+    await waitForServer(4173);
     
     // Test preview server
     await testServer('http://localhost:4173', 'Preview Server', 'preview');
@@ -205,8 +256,20 @@ async function main() {
     results.comparison.issues.push(`Comparison failed: ${error.message}`);
   } finally {
     // Cleanup
-    if (devServer && !devServer.killed) devServer.kill();
-    if (previewServer && !previewServer.killed) previewServer.kill();
+    if (devServer) {
+      try {
+        devServer.kill('SIGTERM');
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+    }
+    if (previewServer) {
+      try {
+        previewServer.kill('SIGTERM');
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+    }
   }
   
   // Save results

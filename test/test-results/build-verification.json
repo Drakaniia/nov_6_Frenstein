@@ -1,0 +1,74 @@
+{
+  "timestamp": "2025-11-05T16:00:18.639Z",
+  "buildSuccess": true,
+  "distExists": true,
+  "indexHtml": {
+    "exists": true,
+    "hasRootDiv": true,
+    "hasScriptTag": true
+  },
+  "assets": {
+    "js": [
+      {
+        "path": "assets\\index-S54qVFYb.js",
+        "size": 462269
+      }
+    ],
+    "css": [
+      {
+        "path": "assets\\index-CWV7ARv7.css",
+        "size": 67122
+      }
+    ],
+    "images": [
+      {
+        "path": "assets\\giig-BNXI0RSo.gif",
+        "size": 460520
+      },
+      {
+        "path": "assets\\Hero Image-EWXI4siO.png",
+        "size": 611203
+      },
+      {
+        "path": "assets\\Hover (1)-CoWb2vpI.jpg",
+        "size": 105981
+      },
+      {
+        "path": "assets\\Hover (3)-CkgoxQUb.jpg",
+        "size": 156181
+      },
+      {
+        "path": "assets\\Hover (5)-BG3vPzfi.jpg",
+        "size": 141345
+      },
+      {
+        "path": "assets\\memory3-BM9c6ph7.jpg",
+        "size": 242048
+      },
+      {
+        "path": "placeholder.svg",
+        "size": 3253
+      }
+    ],
+    "other": [
+      {
+        "path": "favicon.ico",
+        "size": 7645
+      },
+      {
+        "path": "index.html",
+        "size": 708
+      },
+      {
+        "path": "robots.txt",
+        "size": 174
+      }
+    ]
+  },
+  "bundleAnalysis": {
+    "totalSize": 2258449,
+    "jsSize": 462269,
+    "cssSize": 67122
+  },
+  "issues": []
+}
