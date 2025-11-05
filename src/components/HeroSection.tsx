@@ -31,13 +31,6 @@ export const HeroSection = () => {
         duration: 0.6,                                                                         
         ease: 'power3.out',                                                                    
       })                                                                                       
-      .from(imageRef.current, {                                                             
-        opacity: 0,                                                                            
-        y: 30,                                                                                 
-        scale: 0.8,
-        duration: 0.6,                                                                         
-        ease: 'power3.out',                                                                    
-      }, '-=0.3')                                                                              
       .from(cakeRef.current, {                                                                 
         opacity: 0,                                                                            
         scale: 0,                                                                              
@@ -54,26 +47,36 @@ export const HeroSection = () => {
       repeat: -1,                                                                              
     });                                                                                        
 
-    // Self-contained horizontal scroll effect without pinning                                
+    // Set initial positions
+    gsap.set(introRef.current, { x: 0 }); // Start centered
+    gsap.set(imageContainerRef.current, { 
+      x: "100%", // Start completely hidden on the right
+      opacity: 0 
+    });
+
+    // Scroll-triggered animations with different timings
     ScrollTrigger.create({                                                                     
       trigger: containerRef.current,                                                           
       start: "top center",                                                                        
-      end: "bottom center", // Use the natural height of the section                                         
+      end: "bottom center",                                         
       scrub: 1,                                                                                
       onUpdate: (self) => {                                                                    
         const progress = self.progress;                                                        
 
-        // Move intro content to the left as user scrolls                                      
+        // Move intro content to the left gradually (starts moving right away)
         gsap.to(introRef.current, {                                                            
-          x:  -progress * 50 + "%",                    
-          duration: 0.4,                                                                       
+          x: -progress * 40 + "%", // Move left by up to 40% of container width                     
+          duration: 0.6,                                                                       
           ease: "power2.out"                                                                         
         });                                                                                    
 
-        // Fade in and reveal the image container from the right                               
+        // Image reveals sooner and moves faster from right to left
+        // Start revealing at 20% scroll progress instead of 0%
+        const imageProgress = Math.max(0, (progress - 0.2) / 0.8); // Starts at 20% scroll, reaches full at 100%
+        
         gsap.to(imageContainerRef.current, {                                                   
-          x: (1 - progress) * 100 + "%",           
-          opacity: progress,                                                                   
+          x: (1 - imageProgress) * 80 + "%", // Start from 60% right and move to 0%             
+          opacity: imageProgress,                                                                   
           duration: 0.6,                                                                       
           ease: "power2.out"                                                                         
         });                                                                                    
@@ -92,7 +95,7 @@ export const HeroSection = () => {
                                                                                                
   return (                                                                                     
     <section ref={containerRef} className="h-screen relative overflow-hidden bg-transparent z-10">                 
-      {/* Hero intro content */}                                                               
+      {/* Hero intro content - starts centered */}                                                               
       <div                                                                                     
         ref={heroRef}                                                                          
         className="absolute inset-0 flex items-center justify-center px-4"                     
@@ -111,12 +114,8 @@ export const HeroSection = () => {
             className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-celebration             
 bg-clip-text text-transparent"                                                                 
           >                                                                                    
-          Happy Birthday Frenstein! 🎉                                                              
+            Happy Birthday Frenstein! 🎉                                                              
           </h1>                                                                                
-                                                                                               
-          {/* Replace paragraph with Hero Image */}
-          <div className="flex justify-center mb-8">
-          </div>                                                                                 
                                                                                                
           <div className="mt-12 inline-block">                                                 
             <div className="animate-bounce text-4xl">👇</div>                                  
@@ -125,17 +124,17 @@ bg-clip-text text-transparent"
         </div>                                                                                 
       </div>                                                                                   
                                                                                                
-      {/* Image container that appears from the right with the same hero image */}                                      
+      {/* Image container - starts hidden on the right, reveals sooner during scroll */}                                      
       <div                                                                                     
         ref={imageContainerRef}                                                                
-        className="absolute right-0 top-0 w-1/2 h-full flex items-center justify-center        
-opacity-0"                                                    
+        className="absolute right-0 top-0 w-1/2 h-full flex items-center justify-center opacity-0"                                                    
+        style={{ transform: 'translateX(100%)' }}                                              
       >                                                                                        
         <div className="w-full h-full flex items-center justify-center p-8">                                                               
           <img 
             src={HeroImage}
             alt="Hero Image"
-            className="max-w-full max-h-full "
+            className="max-w-full max-h-full"
           />                                                                             
         </div>                                                                                 
       </div>                                                                                   
