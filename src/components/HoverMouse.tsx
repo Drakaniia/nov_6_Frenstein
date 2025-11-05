@@ -5,11 +5,13 @@ import { Play, Pause, SkipBack, SkipForward, Volume2 } from 'lucide-react';
 
 // Sample images for the hover effect - you can replace these with actual image paths
 const hoverImages = [
-  '/placeholder.svg',
-  '/placeholder.svg', 
-  '/placeholder.svg',
-  '/placeholder.svg',
-  '/placeholder.svg'
+  '/src/assets/mouse image  (1).jpeg',
+  '/src/assets/mouse image  (1).jpg',
+  '/src/assets/mouse image  (2).jpg',
+  '/src/assets/mouse image  (3).jpg',
+  '/src/assets/mouse image  (4).jpg',
+  '/src/assets/mouse image  (5).jpg',
+  '/src/assets/mouse image  (6).jpg'
 ];
 
 interface FloatingImage {
