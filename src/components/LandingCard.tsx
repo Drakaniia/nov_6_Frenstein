@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { Card } from '@/components/ui/card';
-import { Lock, Image as ImageIcon } from 'lucide-react';
+import { Lock } from 'lucide-react';
+import giigGif from '@/assets/giig.gif';
 
 interface LandingCardProps {
   onOpen: () => void;
@@ -70,10 +71,9 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
           {/* Left side - Picture Area */}
           <div className="md:w-1/2 bg-gradient-to-br from-pink-300 to-rose-300 p-8 flex items-center justify-center min-h-[400px]">
             <div className="text-center">
-              <div className="w-48 h-48 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 mx-auto border-4 border-white/50">
-                <ImageIcon className="w-20 h-20 text-white/70" />
+              <div className="w-90 h-90 items-center justify-center mb-4 mx-auto">
+                <img src={giigGif} alt="Animated GIF" className="w-full h-full object-cover rounded-2xl" />
               </div>
-              <p className="text-white/80 text-sm font-medium">Your custom image will appear here</p>
             </div>
           </div>
 
