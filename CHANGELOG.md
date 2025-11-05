@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 2025-11-05
 
+#### 🐛 Bug Fixes
+
+- **fix hover mouse** (`99fc455`) - *Qwenzy*
+  - 📁 3 frontend files
+
+**Total**: 1 commit(s)
+
+---
+
+
+### 2025-11-05
+
 #### ✨ New Features
 
 - **add images** (`e1bf15a`) - *Qwenzy*

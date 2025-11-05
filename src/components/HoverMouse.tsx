@@ -12,6 +12,11 @@ const trailImagePath = [
   '/src/assets/Hover (4).jpg',
   '/src/assets/Hover (5).jpg',
   '/src/assets/Hover (6).jpg',
+  '/src/assets/memory1.jpg',
+  '/src/assets/memory2.jpg',
+  '/src/assets/memory3.jpg',
+  '/src/assets/memory4.jpg',
+  '/src/assets/memory1.jpg',
 ];
 
 interface TrailImage {
@@ -247,25 +252,71 @@ export const HoverMouse = () => {
 
           {/* Birthday Message */}
           <Card className="p-6">
-            <h2 className="text-3xl font-bold mb-4 text-center bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent" 
-                style={{ fontFamily: 'Dancing Script, cursive' }}>
-              Happy 21st Birthday, My Love!
+            <h2
+              className="text-3xl font-bold mb-4 text-center bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent"
+              style={{ fontFamily: 'Dancing Script, cursive' }}
+            >
+              Happy 20th Birthday, Mi Amor!
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                Today marks a special milestone in your life - your 21st birthday! This is not just another year added to your life, but the beginning of an exciting new chapter filled with endless possibilities and adventures.
+                It’s hard to believe how many stories have already been written on every
+                page of your chapter. Even though not every moment is a good one, each
+                experience—both joyful and painful—has shaped who you are today. Life
+                doesn’t always follow the path we expect, but every obstacle you’ve faced
+                has added depth to your story and strength to your heart.
               </p>
               <p>
-                As you step into this new phase of adulthood, may you embrace every moment with joy, courage, and wonder. Your journey has been beautiful so far, and I can't wait to see all the amazing things you'll accomplish in the years ahead.
+                As the poem says, “Don’t overthink yet—you’ll succeed in your goals.”
+                Those words remind me that even when life feels uncertain, education will
+                always be a light that guides us toward a better future. It teaches us
+                that a degree is not just a piece of paper, but a symbol of our hard work,
+                sleepless nights, and faith in ourselves. We may face doubt, fear, and
+                even moments of exhaustion, but the journey of learning shapes who we are
+                and who we will become.
               </p>
               <p>
-                Remember that you are loved, cherished, and supported every step of the way. Here's to celebrating you today and always - may this year bring you happiness, success, and all your heart desires!
+                My sincere apology for the days I wasn’t by your side, or when I was too
+                stubborn to understand. Especially last year on your birthday—I didn’t
+                even give you anything, not even a simple gesture to show how much I
+                cared. I know there were times when my attitude hurt you, when my actions
+                made you upset, and for that, I’m truly sorry.
+              </p>
+              <p>
+                I never meant to make you feel unappreciated or unloved. Sometimes I get
+                lost in my own thoughts and forget how my silence or mistakes can affect
+                others. But please know that deep down, I’ve always valued you and the
+                moments we’ve shared.
+              </p>
+              <p>
+                I can’t change the past, but I can promise to be better—to listen more, to
+                care more, and to show more of the gratitude you deserve. I’m hoping that
+                you’ll still forgive me, still see the good in me, and still believe that
+                I’m trying my best to grow and make things right.
+              </p>
+              <p>
+                But here we are today. I wish I could be by your side right now—to look at
+                you and show you just how lucky I am to have you in my life. Every moment
+                with you feels like a reminder that even in the most ordinary days, love
+                can make everything brighter.
+              </p>
+              <p>
+                Remember that you are deeply loved, cherished, and supported in every step
+                you take. You’ve touched my life in ways words can hardly express, and
+                I’ll always be grateful for that.
+              </p>
+              <p>
+                May this year bring you endless happiness, success, and everything your
+                heart desires. You deserve nothing less than the best that life can offer.
+                And no matter where we are or how far apart we may be, my thoughts and
+                care will always find their way to you.
               </p>
               <p className="text-center font-semibold text-purple-600 mt-6">
                 With all my love and best wishes! 💕
               </p>
             </div>
           </Card>
+
         </div>
 
         {/* Center - Interactive Trail Area */}

@@ -2,16 +2,16 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Card } from '@/components/ui/card';
 
-import memory1 from '@/assets/memory1.jpg';
-import memory2 from '@/assets/memory2.jpg';
+import memory1 from '@/assets/Hover (3).jpg';
+import memory2 from '@/assets/Hover (5).jpg';
 import memory3 from '@/assets/memory3.jpg';
-import memory4 from '@/assets/memory4.jpg';
+import memory4 from '@/assets/Hover (1).jpg';
 
 const memories = [
-  { id: 1, label: 'Beautiful Smile', image: memory1 },
-  { id: 2, label: 'Park Adventures', image: memory2 },
-  { id: 3, label: 'Sweet Moments', image: memory3 },
-  { id: 4, label: 'Fun Times', image: memory4 },
+  { id: 1, image: memory1 },
+  { id: 2, image: memory2 },
+  { id: 3, image: memory3 },
+  { id: 4, image: memory4 },
 ];
 
 export const MemoryGallery = () => {
@@ -99,13 +99,11 @@ export const MemoryGallery = () => {
               >
                 <img
                   src={memory.image}
-                  alt={memory.label}
                   className="w-full h-full object-cover pointer-events-none"
                   draggable="false"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
                   <p className="text-xl font-semibold text-white">
-                    {memory.label}
                   </p>
                 </div>
               </Card>
