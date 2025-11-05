@@ -136,7 +136,7 @@ export const HoverMouse = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 relative overflow-hidden">
+    <section className="min-h-screen bg-transparent relative overflow-hidden z-10">
       {/* Audio Element */}
       <audio
         ref={audioRef}
@@ -261,11 +261,6 @@ export const HoverMouse = () => {
           </div>
         </div>
       </div>
-
-      {/* Background decorative elements */}
-      <div className="absolute top-20 left-1/2 w-32 h-32 bg-pink-200 rounded-full opacity-30 animate-pulse"></div>
-      <div className="absolute bottom-20 right-1/4 w-24 h-24 bg-purple-200 rounded-full opacity-20 animate-bounce"></div>
-      <div className="absolute top-1/3 right-20 w-16 h-16 bg-indigo-200 rounded-full opacity-25 animate-pulse"></div>
     </section>
   );
 };

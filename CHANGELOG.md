@@ -10,6 +10,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 #### ✨ New Features
 
+- **add music** (`7a69be3`) - *Qwenzy*
+  - 📁 1 doc file, 1 config file, 3 frontend files, 1 backend file, 1 other file
+  - 📊 *Medium change (7 files)*
+
+**Total**: 1 commit(s)
+
+---
+
+
+### 2025-11-05
+
+#### ✨ New Features
+
 - **add Hover mouse** (`110a9f2`) - *Qwenzy*
   - 📁 1 doc file, 1 config file, 4 frontend files, 1 backend file
 

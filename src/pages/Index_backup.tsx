@@ -5,7 +5,6 @@ import { ScrollMessage } from '@/components/ScrollMessage';
 import { MemoryGallery } from '@/components/MemoryGallery';
 import { HoverMouse } from '@/components/HoverMouse';
 import { ConfettiEffect } from '@/components/ConfettiEffect';
-import { GlobalBackground } from '@/components/GlobalBackground';
 
 const Index = () => {
   const [opened, setOpened] = useState(false);
@@ -21,9 +20,6 @@ const Index = () => {
 
   return (
     <>
-      {/* Global background applied to all sections */}
-      <GlobalBackground />
-      
       <ConfettiEffect trigger={showConfetti} />
       
       {!opened ? (

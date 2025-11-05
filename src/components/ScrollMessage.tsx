@@ -30,8 +30,12 @@ export const ScrollMessage = () => {
     const lines = containerRef.current?.querySelectorAll('.message-line');
     if (!lines || lines.length === 0) return;
 
-    // Clear existing triggers
-    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    // Clear existing triggers for this component only
+    ScrollTrigger.getAll().forEach(trigger => {
+      if (trigger.trigger === containerRef.current) {
+        trigger.kill();
+      }
+    });
 
     // Create a smooth S-curve path across the entire page
     const updatePath = () => {
@@ -139,25 +143,8 @@ export const ScrollMessage = () => {
 
       <section
         ref={containerRef}
-        className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50 flex items-center justify-center py-12 px-4 relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden"
       >
-        {/* Background hearts */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(15)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-pink-300 opacity-20 animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                fontSize: `${Math.random() * 30 + 20}px`,
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            >
-              ♡
-            </div>
-          ))}
-        </div>
 
         {/* SVG Path Overlay - Big S Curve */}
         <svg

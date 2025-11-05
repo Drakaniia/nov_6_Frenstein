@@ -73,7 +73,7 @@ export const MemoryGallery = () => {
     animationsRef.current[index]?.play();
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted/30">
+    <section className="py-20 bg-transparent relative z-10">
       <div className="text-center mb-12 px-4">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
           Memories Together 📸
