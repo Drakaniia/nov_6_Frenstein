@@ -2,38 +2,39 @@ import { useEffect, useRef, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, SkipBack, SkipForward, Volume2 } from 'lucide-react';
+import gsap from 'gsap';
 
-// Sample images for the hover effect - you can replace these with actual image paths
-const hoverImages = [
-  '/src/assets/mouse image  (1).jpeg',
-  '/src/assets/mouse image  (1).jpg',
-  '/src/assets/mouse image  (2).jpg',
-  '/src/assets/mouse image  (3).jpg',
-  '/src/assets/mouse image  (4).jpg',
-  '/src/assets/mouse image  (5).jpg',
-  '/src/assets/mouse image  (6).jpg'
+// Images for the trail effect from your assets folder
+const trailImagePath = [
+  '/src/assets/Hover (1).jpg',
+  '/src/assets/Hover (2).jpg',
+  '/src/assets/Hover (3).jpg',
+  '/src/assets/Hover (4).jpg',
+  '/src/assets/Hover (5).jpg',
+  '/src/assets/Hover (6).jpg',
 ];
 
-interface FloatingImage {
+interface TrailImage {
   id: number;
   x: number;
   y: number;
   image: string;
-  opacity: number;
-  scale: number;
+  ref: HTMLDivElement | null;
 }
 
 export const HoverMouse = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [floatingImages, setFloatingImages] = useState<FloatingImage[]>([]);
+  const [trailImages, setTrailImages] = useState<TrailImage[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const imageIdCounter = useRef(0);
+  const lastMousePos = useRef({ x: 0, y: 0 });
+  const throttleTimer = useRef<number | null>(null);
 
   // Music player state
-  const [currentTrack, setCurrentTrack] = useState({
+  const [currentTrack] = useState({
     title: "seven",
     artist: "Taylor Swift",
     coverImage: "/src/assets/Cover of seven by Taylor Swift.jpg",
@@ -44,47 +45,86 @@ export const HoverMouse = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    let animationFrame: number;
-
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      // Create new floating image
-      const newImage: FloatingImage = {
-        id: imageIdCounter.current++,
-        x,
-        y,
-        image: hoverImages[Math.floor(Math.random() * hoverImages.length)],
-        opacity: 1,
-        scale: 0
-      };
+      // Calculate distance from last position
+      const dx = x - lastMousePos.current.x;
+      const dy = y - lastMousePos.current.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-      setFloatingImages(prev => [...prev, newImage]);
-    };
+      // Only create new image if moved enough distance (throttle effect)
+      if (distance > 30) {
+        lastMousePos.current = { x, y };
 
-    const animateImages = () => {
-      setFloatingImages(prev => 
-        prev
-          .map(img => ({
-            ...img,
-            opacity: Math.max(0, img.opacity - 0.02),
-            scale: Math.min(1, img.scale + 0.05)
-          }))
-          .filter(img => img.opacity > 0)
-      );
-      animationFrame = requestAnimationFrame(animateImages);
+        // Create new trail image
+        const randomImage = trailImagePath[Math.floor(Math.random() * trailImagePath.length)];
+        const newImage: TrailImage = {
+          id: imageIdCounter.current++,
+          x,
+          y,
+          image: randomImage,
+          ref: null
+        };
+
+        setTrailImages(prev => [...prev, newImage]);
+
+        // Clear any existing throttle timer
+        if (throttleTimer.current) {
+          clearTimeout(throttleTimer.current);
+        }
+      }
     };
 
     container.addEventListener('mousemove', handleMouseMove);
-    animationFrame = requestAnimationFrame(animateImages);
 
     return () => {
       container.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrame);
+      if (throttleTimer.current) {
+        clearTimeout(throttleTimer.current);
+      }
     };
   }, []);
+
+  // GSAP animation for each trail image
+  useEffect(() => {
+    trailImages.forEach(img => {
+      if (img.ref && !img.ref.dataset.animated) {
+        // Mark as animated to prevent re-animation
+        img.ref.dataset.animated = 'true';
+        
+        // Initial state
+        gsap.set(img.ref, {
+          scale: 0,
+          opacity: 0,
+          rotation: Math.random() * 20 - 10 // Random rotation between -10 and 10
+        });
+
+        // Animation timeline
+        const tl = gsap.timeline({
+          onComplete: () => {
+            // Remove image from state after animation completes
+            setTrailImages(prev => prev.filter(i => i.id !== img.id));
+          }
+        });
+
+        tl.to(img.ref, {
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          ease: 'elastic.out(1, 0.5)'
+        })
+        .to(img.ref, {
+          opacity: 0,
+          scale: 1, // Keep scale at 1 to prevent shrinking effect
+          duration: 1.2, // Extended fade out duration
+          ease: 'power2.inOut'
+        }, '+=0.5'); // Longer delay before fade out
+      }
+    });
+  }, [trailImages]);
 
   // Audio event handlers
   useEffect(() => {
@@ -138,7 +178,7 @@ export const HoverMouse = () => {
   };
 
   return (
-    <section className="min-h-screen bg-transparent relative overflow-hidden z-10">
+    <section className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 relative overflow-hidden">
       {/* Audio Element */}
       <audio
         ref={audioRef}
@@ -146,28 +186,9 @@ export const HoverMouse = () => {
         preload="metadata"
       />
 
-      {/* Floating Images */}
-      {floatingImages.map(img => (
-        <div
-          key={img.id}
-          className="absolute pointer-events-none z-10"
-          style={{
-            left: img.x - 25,
-            top: img.y - 25,
-            opacity: img.opacity,
-            transform: `scale(${img.scale})`,
-            transition: 'transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
-          }}
-        >
-          <div className="w-12 h-12 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full shadow-lg flex items-center justify-center">
-            <span className="text-white text-xl">🎉</span>
-          </div>
-        </div>
-      ))}
-
       <div className="flex h-screen">
         {/* Left Side - Music Player and Message */}
-        <div className="w-96 p-6 bg-white/80 backdrop-blur-sm shadow-xl">
+        <div className="w-96 p-6 bg-white/80 backdrop-blur-sm shadow-xl overflow-y-auto">
           {/* Music Player */}
           <Card className="p-4 mb-6">
             <div className="text-center mb-4">
@@ -178,15 +199,14 @@ export const HoverMouse = () => {
                   alt={`${currentTrack.title} cover`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback if image doesn't load
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
-                    target.nextElementSibling?.classList.remove('hidden');
+                    const parent = target.parentElement;
+                    if (parent) {
+                      parent.innerHTML = '<div class="w-full h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15":/svg></div>';
+                    }
                   }}
                 />
-                <div className="hidden w-full h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
-                  <Volume2 className="w-8 h-8 text-white" />
-                </div>
               </div>
               <h3 className="font-semibold text-gray-800">{currentTrack.title}</h3>
               <p className="text-sm text-gray-600">{currentTrack.artist}</p>
@@ -248,17 +268,51 @@ export const HoverMouse = () => {
           </Card>
         </div>
 
-        {/* Center - Main Content */}
+        {/* Center - Interactive Trail Area */}
         <div 
           ref={containerRef}
-          className="flex-1 flex items-center justify-center cursor-none"
+          className="flex-1 flex items-center justify-center cursor-none relative overflow-hidden"
         >
-          <div className="text-center">
-            <h1 className="text-1xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 animate-pulse">
+          {/* Trail Images */}
+          {trailImages.map(img => (
+            <div
+              key={img.id}
+              ref={el => {
+                if (el && !img.ref) {
+                  img.ref = el;
+                }
+              }}
+              className="absolute pointer-events-none"
+              style={{
+                left: img.x - 40,
+                top: img.y - 50,
+                zIndex: 10
+              }}
+            >
+              {/* Polaroid-style frame */}
+              <div className="bg-white p-2 shadow-2xl" style={{ width: '80px' }}>
+                <div className="bg-gray-200 w-full h-20 overflow-hidden">
+                  <img 
+                    src={img.image} 
+                    alt="trail" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect fill="%23fbbf24" width="100" height="100"/%3E%3Ctext x="50" y="50" font-size="40" text-anchor="middle" dy=".3em"%3E🎉%3C/text%3E%3C/svg%3E';
+                    }}
+                  />
+                </div>
+                <div className="h-4 bg-white"></div>
+              </div>
+            </div>
+          ))}
+
+          <div className="text-center z-0">
+            <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 animate-pulse">
               HOVER YOUR MOUSE
             </h1>
-            <p className="text-x-01 text-gray-600 mt-2">
-              USE LAPTOP OR DESKROP FOR BETTER EXPERIENCE 
+            <p className="text-sm text-gray-600 mt-2">
+              USE LAPTOP OR DESKTOP FOR BETTER EXPERIENCE 
             </p>
           </div>
         </div>

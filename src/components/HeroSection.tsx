@@ -118,7 +118,7 @@ export const HeroSection = () => {
             className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-celebration             
 bg-clip-text text-transparent"                                                                 
           >                                                                                    
-            Happy Birthday Frenstein! 🎉                                                              
+            Happy Birthday My Baby! 🎉                                                              
           </h1>                                                                                
                                                                                                
           <div className="mt-12 inline-block">                                                 
