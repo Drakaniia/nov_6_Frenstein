@@ -3,6 +3,7 @@ import { LandingCard } from '@/components/LandingCard';
 import { HeroSection } from '@/components/HeroSection';
 import { ScrollMessage } from '@/components/ScrollMessage';
 import { MemoryGallery } from '@/components/MemoryGallery';
+import { HoverMouse } from '@/components/HoverMouse';
 import { ConfettiEffect } from '@/components/ConfettiEffect';
 
 const Index = () => {
@@ -28,6 +29,7 @@ const Index = () => {
           <HeroSection />
           <ScrollMessage />
           <MemoryGallery />
+          <HoverMouse />
         </>
       )}
     </>

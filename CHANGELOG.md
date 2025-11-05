@@ -10,6 +10,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 #### 🔧 Maintenance
 
+- **update gitigore** (`f0f1756`) - *Qwenzy*
+  - 📁 1 doc file, 1 config file, 1 frontend file, 1 backend file
+
+**Total**: 1 commit(s)
+
+---
+
+
+### 2025-11-05
+
+#### 🔧 Maintenance
+
 - **enhance scroll message** (`972c189`) - *Qwenzy*
   - 📁 2 doc files, 1 config file, 5 frontend files, 2 backend files
   - 📊 *Medium change (8 files)*
