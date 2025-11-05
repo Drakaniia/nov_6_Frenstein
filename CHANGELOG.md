@@ -8,6 +8,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 2025-11-05
 
+#### ✨ New Features
+
+- **add images** (`e1bf15a`) - *Qwenzy*
+  - 📁 1 frontend file, 6 other files
+  - 📊 *Medium change (7 files)*
+
+**Total**: 1 commit(s)
+
+---
+
+
+### 2025-11-05
+
 #### 🔧 Maintenance
 
 - **pushh** (`b26a617`) - *Qwenzy*

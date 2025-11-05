@@ -37,7 +37,8 @@ export const ScrollMessage = () => {
       }
     });
 
-    // Create a smooth S-curve path across the entire page
+    
+    // Create an elegant heart-shaped path across the entire page
     const updatePath = () => {
       if (!svgRef.current || !pathRef.current) return;
       
@@ -45,19 +46,46 @@ export const ScrollMessage = () => {
       const width = svgRect.width;
       const height = svgRect.height;
       
-      // Define a beautiful S-curve that spans the entire page
-      const startX = width * 0.2;
-      const startY = height * 0.1;
-      const endX = width * 0.8;
-      const endY = height * 0.9;
+      // Center and scale the heart
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const scale = Math.min(width, height) * 0.35;
       
-      // Control points for smooth S-curve
-      const cp1x = width * 0.8;
-      const cp1y = height * 0.3;
-      const cp2x = width * 0.2;
-      const cp2y = height * 0.7;
+      // Mathematical heart curve using parametric equations
+      // Starting from bottom point, going counterclockwise
+      const numPoints = 100;
+      const points = [];
       
-      const pathData = `M ${startX} ${startY} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endX} ${endY}`;
+      for (let i = 0; i <= numPoints; i++) {
+        const t = (i / numPoints) * 2 * Math.PI;
+        
+        // Heart curve equations (parametric form)
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        
+        points.push({
+          x: centerX + (x * scale) / 16,
+          y: centerY + (y * scale) / 16
+        });
+      }
+      
+      // Create smooth path with curves
+      let pathData = `M ${points[0].x} ${points[0].y}`;
+      
+      for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const next = points[i + 1] || points[0];
+        
+        // Calculate control points for smooth curves
+        const cp1x = prev.x + (curr.x - prev.x) * 0.5;
+        const cp1y = prev.y + (curr.y - prev.y) * 0.5;
+        const cp2x = curr.x - (next.x - curr.x) * 0.5;
+        const cp2y = curr.y - (next.y - curr.y) * 0.5;
+        
+        pathData += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+      }
+      
       pathRef.current.setAttribute('d', pathData);
       
       // Get path length for animation
@@ -65,6 +93,7 @@ export const ScrollMessage = () => {
       pathRef.current.style.strokeDasharray = `${pathLength}`;
       pathRef.current.style.strokeDashoffset = `${pathLength}`;
     };
+
 
     // Initial path setup
     updatePath();

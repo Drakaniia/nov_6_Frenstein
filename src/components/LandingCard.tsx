@@ -13,17 +13,6 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
   const [shake, setShake] = useState(false);
   const correctPin = '2306'; // You can change this to any 4-digit code
 
-  useEffect(() => {
-    // Floating animation
-    gsap.to(cardRef.current, {
-      y: -15,
-      duration: 2.5,
-      ease: 'power1.inOut',
-      yoyo: true,
-      repeat: -1,
-    });
-  }, []);
-
   const handlePinInput = (index: number, value: string) => {
     if (value.length > 1) value = value.slice(-1);
     if (!/^\d*$/.test(value)) return;
@@ -69,24 +58,7 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-pink-200 to-rose-200 relative overflow-hidden">
-      {/* Background hearts */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute text-pink-300 opacity-20 animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 30 + 20}px`,
-              animationDelay: `${Math.random() * 2}s`,
-            }}
-          >
-            ♡
-          </div>
-        ))}
-      </div>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
 
       <Card
         ref={cardRef}
