@@ -23,15 +23,19 @@ interface FloatingImage {
 
 export const HoverMouse = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [floatingImages, setFloatingImages] = useState<FloatingImage[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const imageIdCounter = useRef(0);
 
   // Music player state
   const [currentTrack, setCurrentTrack] = useState({
-    title: "Happy Birthday Song",
-    artist: "Special for You",
-    duration: "3:24"
+    title: "seven",
+    artist: "Taylor Swift",
+    coverImage: "/src/assets/Cover of seven by Taylor Swift.jpg",
+    audioFile: "/src/assets/seven - Taylor Swift.mp3"
   });
 
   useEffect(() => {
@@ -80,12 +84,66 @@ export const HoverMouse = () => {
     };
   }, []);
 
+  // Audio event handlers
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration);
+    const handleEnded = () => setIsPlaying(false);
+
+    audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
   const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
     setIsPlaying(!isPlaying);
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const newTime = percentage * duration;
+    
+    audio.currentTime = newTime;
+    setCurrentTime(newTime);
   };
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 relative overflow-hidden">
+      {/* Audio Element */}
+      <audio
+        ref={audioRef}
+        src={currentTrack.audioFile}
+        preload="metadata"
+      />
+
       {/* Floating Images */}
       {floatingImages.map(img => (
         <div
@@ -111,16 +169,36 @@ export const HoverMouse = () => {
           {/* Music Player */}
           <Card className="p-4 mb-6">
             <div className="text-center mb-4">
-              <div className="w-20 h-20 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <Volume2 className="w-8 h-8 text-white" />
+              {/* Album Cover */}
+              <div className="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden shadow-lg">
+                <img 
+                  src={currentTrack.coverImage} 
+                  alt={`${currentTrack.title} cover`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback if image doesn't load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden w-full h-full bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                  <Volume2 className="w-8 h-8 text-white" />
+                </div>
               </div>
               <h3 className="font-semibold text-gray-800">{currentTrack.title}</h3>
               <p className="text-sm text-gray-600">{currentTrack.artist}</p>
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-              <div className="bg-gradient-to-r from-pink-400 to-purple-500 h-2 rounded-full w-1/3"></div>
+            <div 
+              className="w-full bg-gray-200 rounded-full h-2 mb-4 cursor-pointer"
+              onClick={handleProgressClick}
+            >
+              <div 
+                className="bg-gradient-to-r from-pink-400 to-purple-500 h-2 rounded-full transition-all duration-100"
+                style={{ width: duration ? `${(currentTime / duration) * 100}%` : '0%' }}
+              ></div>
             </div>
 
             {/* Controls */}
@@ -140,8 +218,8 @@ export const HoverMouse = () => {
             </div>
 
             <div className="flex justify-between text-xs text-gray-500 mt-2">
-              <span>1:12</span>
-              <span>{currentTrack.duration}</span>
+              <span>{formatTime(currentTime)}</span>
+              <span>{formatTime(duration)}</span>
             </div>
           </Card>
 

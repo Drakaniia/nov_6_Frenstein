@@ -1,12 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Cake, Sparkles } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const cakeRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLDivElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
