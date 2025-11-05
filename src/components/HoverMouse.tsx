@@ -124,9 +124,9 @@ export const HoverMouse = () => {
         .to(img.ref, {
           opacity: 0,
           scale: 1, // Keep scale at 1 to prevent shrinking effect
-          duration: 1.2, // Extended fade out duration
+          duration: 1, // Extended fade out duration
           ease: 'power2.inOut'
-        }, '+=0.5'); // Longer delay before fade out
+        }, '+=0.8'); // Longer delay before fade out
       }
     });
   }, [trailImages]);
