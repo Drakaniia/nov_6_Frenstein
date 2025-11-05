@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### 2025-11-05
 
+#### 🐛 Bug Fixes
+
+- **fix hero section** (`cceaa36`) - *Qwenzy*
+  - 📁 1 doc file, 1 config file, 2 frontend files, 1 backend file
+
+**Total**: 1 commit(s)
+
+---
+
+
+### 2025-11-05
+
 #### 🔧 Maintenance
 
 - **asasd** (`be01bef`) - *Qwenzy*
