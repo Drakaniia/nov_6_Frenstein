@@ -103,8 +103,7 @@ export const MemoryGallery = () => {
                   draggable="false"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                  <p className="text-xl font-semibold text-white">
-                  </p>
+                  <p className="text-xl font-semibold text-white"></p>
                 </div>
               </Card>
             ))}

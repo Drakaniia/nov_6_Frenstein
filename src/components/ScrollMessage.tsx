@@ -5,19 +5,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const messages = [
-  "Life will be better with education.",
+  'Life will be better with education.',
   "I just don't think that,",
-  "A degree is just a paper.",
-  "In my perspective,",
-  "I will have a better future.",
-  "Stop telling me,",
+  'A degree is just a paper.',
+  'In my perspective,',
+  'I will have a better future.',
+  'Stop telling me,',
   "It's notorious!",
-  "Achieving dreams,",
-  "Spending my time in studying and",
-  "Overthinking much—yet,",
+  'Achieving dreams,',
+  'Spending my time in studying and',
+  'Overthinking much—yet,',
   "I'll succeed my goals",
   "I don't believe that,",
-  "Life is not worthwhile."
+  'Life is not worthwhile.',
 ];
 
 export const ScrollMessage = () => {
@@ -37,63 +37,66 @@ export const ScrollMessage = () => {
       }
     });
 
-    
     // Create an elegant heart-shaped path across the entire page
     const updatePath = () => {
       if (!svgRef.current || !pathRef.current) return;
-      
+
       const svgRect = svgRef.current.getBoundingClientRect();
       const width = svgRect.width;
       const height = svgRect.height;
-      
+
       // Center and scale the heart
       const centerX = width / 2;
       const centerY = height / 2;
       const scale = Math.min(width, height) * 0.35;
-      
+
       // Mathematical heart curve using parametric equations
       // Starting from bottom point, going counterclockwise
       const numPoints = 100;
       const points = [];
-      
+
       for (let i = 0; i <= numPoints; i++) {
         const t = (i / numPoints) * 2 * Math.PI;
-        
+
         // Heart curve equations (parametric form)
         const x = 16 * Math.pow(Math.sin(t), 3);
-        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-        
+        const y = -(
+          13 * Math.cos(t) -
+          5 * Math.cos(2 * t) -
+          2 * Math.cos(3 * t) -
+          Math.cos(4 * t)
+        );
+
         points.push({
           x: centerX + (x * scale) / 16,
-          y: centerY + (y * scale) / 16
+          y: centerY + (y * scale) / 16,
         });
       }
-      
+
       // Create smooth path with curves
       let pathData = `M ${points[0].x} ${points[0].y}`;
-      
+
       for (let i = 1; i < points.length; i++) {
         const prev = points[i - 1];
         const curr = points[i];
         const next = points[i + 1] || points[0];
-        
+
         // Calculate control points for smooth curves
         const cp1x = prev.x + (curr.x - prev.x) * 0.5;
         const cp1y = prev.y + (curr.y - prev.y) * 0.5;
         const cp2x = curr.x - (next.x - curr.x) * 0.5;
         const cp2y = curr.y - (next.y - curr.y) * 0.5;
-        
+
         pathData += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
       }
-      
+
       pathRef.current.setAttribute('d', pathData);
-      
+
       // Get path length for animation
       const pathLength = pathRef.current.getTotalLength();
       pathRef.current.style.strokeDasharray = `${pathLength}`;
       pathRef.current.style.strokeDashoffset = `${pathLength}`;
     };
-
 
     // Initial path setup
     updatePath();
@@ -114,12 +117,16 @@ export const ScrollMessage = () => {
     lines.forEach((line, index) => {
       gsap.set(line, { opacity: 0, y: 30 });
 
-      tl.to(line, {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        ease: 'power2.out',
-      }, index * 0.3);
+      tl.to(
+        line,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          ease: 'power2.out',
+        },
+        index * 0.3
+      );
 
       tl.to({}, { duration: 0.2 });
     });
@@ -174,7 +181,6 @@ export const ScrollMessage = () => {
         ref={containerRef}
         className="min-h-screen flex items-center justify-center py-12 px-4 relative overflow-hidden"
       >
-
         {/* SVG Path Overlay - Big S Curve */}
         <svg
           ref={svgRef}
@@ -188,17 +194,17 @@ export const ScrollMessage = () => {
               <stop offset="50%" stopColor="#f43f5e" stopOpacity="0.6" />
               <stop offset="100%" stopColor="#fb923c" stopOpacity="0.8" />
             </linearGradient>
-            
+
             {/* Glow filter */}
             <filter id="glow">
-              <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+              <feGaussianBlur stdDeviation="4" result="coloredBlur" />
               <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
-          
+
           <path
             ref={pathRef}
             stroke="url(#pathGradient)"

@@ -60,7 +60,6 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-
       <Card
         ref={cardRef}
         className={`relative z-10 bg-white/90 backdrop-blur-md shadow-2xl overflow-hidden max-w-4xl w-full mx-4 ${
@@ -72,7 +71,11 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
           <div className="md:w-1/2 bg-gradient-to-br from-pink-300 to-rose-300 p-8 flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <div className="w-90 h-90 items-center justify-center mb-4 mx-auto">
-                <img src={giigGif} alt="Animated GIF" className="w-full h-full object-cover rounded-2xl" />
+                <img
+                  src={giigGif}
+                  alt="Animated GIF"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
               </div>
             </div>
           </div>
@@ -91,7 +94,9 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
               <h2 className="text-3xl font-bold text-gray-800">
                 Enter PIN to Unlock
               </h2>
-              <p className="text-pink-600 text-sm">Your special message awaits...</p>
+              <p className="text-pink-600 text-sm">
+                Your special message awaits...
+              </p>
 
               {/* PIN Input */}
               <div className="flex gap-3 justify-center mt-8">
@@ -103,8 +108,8 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
                     inputMode="numeric"
                     maxLength={1}
                     value={digit}
-                    onChange={(e) => handlePinInput(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onChange={e => handlePinInput(index, e.target.value)}
+                    onKeyDown={e => handleKeyDown(index, e)}
                     className="w-14 h-14 text-center text-2xl font-bold border-2 border-pink-300 rounded-lg focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all bg-white"
                     autoFocus={index === 0}
                   />
@@ -113,12 +118,13 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
 
               <div className="mt-6 space-y-2">
                 <div className="flex gap-2 justify-center">
-                  {[1, 2, 3].map((num) => (
+                  {[1, 2, 3].map(num => (
                     <button
                       key={num}
                       onClick={() => {
                         const emptyIndex = pin.findIndex(d => d === '');
-                        if (emptyIndex !== -1) handlePinInput(emptyIndex, num.toString());
+                        if (emptyIndex !== -1)
+                          handlePinInput(emptyIndex, num.toString());
                       }}
                       className="w-12 h-12 bg-pink-100 hover:bg-pink-200 rounded-lg font-semibold text-pink-700 transition-colors"
                     >
@@ -127,12 +133,13 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
                   ))}
                 </div>
                 <div className="flex gap-2 justify-center">
-                  {[4, 5, 6].map((num) => (
+                  {[4, 5, 6].map(num => (
                     <button
                       key={num}
                       onClick={() => {
                         const emptyIndex = pin.findIndex(d => d === '');
-                        if (emptyIndex !== -1) handlePinInput(emptyIndex, num.toString());
+                        if (emptyIndex !== -1)
+                          handlePinInput(emptyIndex, num.toString());
                       }}
                       className="w-12 h-12 bg-pink-100 hover:bg-pink-200 rounded-lg font-semibold text-pink-700 transition-colors"
                     >
@@ -141,12 +148,13 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
                   ))}
                 </div>
                 <div className="flex gap-2 justify-center">
-                  {[7, 8, 9].map((num) => (
+                  {[7, 8, 9].map(num => (
                     <button
                       key={num}
                       onClick={() => {
                         const emptyIndex = pin.findIndex(d => d === '');
-                        if (emptyIndex !== -1) handlePinInput(emptyIndex, num.toString());
+                        if (emptyIndex !== -1)
+                          handlePinInput(emptyIndex, num.toString());
                       }}
                       className="w-12 h-12 bg-pink-100 hover:bg-pink-200 rounded-lg font-semibold text-pink-700 transition-colors"
                     >
@@ -172,7 +180,10 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
                   </button>
                   <button
                     onClick={() => {
-                      const lastFilledIndex = pin.map((d, i) => d ? i : -1).filter(i => i !== -1).pop();
+                      const lastFilledIndex = pin
+                        .map((d, i) => (d ? i : -1))
+                        .filter(i => i !== -1)
+                        .pop();
                       if (lastFilledIndex !== undefined) {
                         const newPin = [...pin];
                         newPin[lastFilledIndex] = '';
@@ -189,7 +200,6 @@ export const LandingCard = ({ onOpen }: LandingCardProps) => {
           </div>
         </div>
       </Card>
-
     </div>
   );
 };

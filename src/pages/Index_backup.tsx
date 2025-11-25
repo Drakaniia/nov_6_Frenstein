@@ -21,7 +21,7 @@ const Index = () => {
   return (
     <>
       <ConfettiEffect trigger={showConfetti} />
-      
+
       {!opened ? (
         <LandingCard onOpen={handleOpen} />
       ) : (

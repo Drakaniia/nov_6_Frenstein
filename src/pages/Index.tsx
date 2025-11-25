@@ -23,9 +23,9 @@ const Index = () => {
     <>
       {/* Global background applied to all sections */}
       <GlobalBackground />
-      
+
       <ConfettiEffect trigger={showConfetti} />
-      
+
       {!opened ? (
         <LandingCard onOpen={handleOpen} />
       ) : (

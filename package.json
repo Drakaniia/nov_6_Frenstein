@@ -9,18 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "test": "cd test && npm run test",
-    "test:ui": "cd test && npm run test:ui",
-    "test:coverage": "cd test && npm run test:coverage",
-    "test:e2e": "cd test && npm run test:e2e",
-    "test:e2e:headed": "cd test && npm run test:e2e:headed",
-    "test:full": "cd test && npm run test:full",
-    "test:build-verification": "cd test && npm run test:build-verification",
-    "test:component-rendering": "cd test && npm run test:component-rendering",
-    "test:dev-vs-preview": "cd test && npm run test:dev-vs-preview",
-    "test:install": "node test/install-test-deps.js"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
