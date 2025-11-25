@@ -4,19 +4,33 @@ import { Button } from '@/components/ui/button';
 import { Play, Pause, SkipBack, SkipForward, Volume2 } from 'lucide-react';
 import gsap from 'gsap';
 
-// Images for the trail effect from your assets folder
+// Import images using ES modules
+import Hover1 from '@/assets/Hover (1).jpg';
+import Hover2 from '@/assets/Hover (2).jpg';
+import Hover3 from '@/assets/Hover (3).jpg';
+import Hover4 from '@/assets/Hover (4).jpg';
+import Hover5 from '@/assets/Hover (5).jpg';
+import Hover6 from '@/assets/Hover (6).jpg';
+import Memory1 from '@/assets/memory1.jpg';
+import Memory2 from '@/assets/memory2.jpg';
+import Memory3 from '@/assets/memory3.jpg';
+import Memory4 from '@/assets/memory4.jpg';
+import CoverImage from '@/assets/Cover of seven by Taylor Swift.jpg';
+import AudioFile from '@/assets/seven - Taylor Swift.mp3';
+
+// Images for the trail effect
 const trailImagePath = [
-  '/src/assets/Hover (1).jpg',
-  '/src/assets/Hover (2).jpg',
-  '/src/assets/Hover (3).jpg',
-  '/src/assets/Hover (4).jpg',
-  '/src/assets/Hover (5).jpg',
-  '/src/assets/Hover (6).jpg',
-  '/src/assets/memory1.jpg',
-  '/src/assets/memory2.jpg',
-  '/src/assets/memory3.jpg',
-  '/src/assets/memory4.jpg',
-  '/src/assets/memory1.jpg',
+  Hover1,
+  Hover2,
+  Hover3,
+  Hover4,
+  Hover5,
+  Hover6,
+  Memory1,
+  Memory2,
+  Memory3,
+  Memory4,
+  Memory1,
 ];
 
 interface TrailImage {
@@ -42,8 +56,8 @@ export const HoverMouse = () => {
   const [currentTrack] = useState({
     title: 'seven',
     artist: 'Taylor Swift',
-    coverImage: '/src/assets/Cover of seven by Taylor Swift.jpg',
-    audioFile: '/src/assets/seven - Taylor Swift.mp3',
+    coverImage: CoverImage,
+    audioFile: AudioFile,
   });
 
   useEffect(() => {
